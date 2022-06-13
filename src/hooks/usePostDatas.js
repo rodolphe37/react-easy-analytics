@@ -1,13 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { siteNameAtom } from "../statesManager/datasAtom";
 import useGeolocation from "./useGeolocation";
 import useTodayDate from "./useTodayDate";
 
-const usePostDatas = ({ BASE_URL, DEBUG_MODE }) => {
+const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
   const userAlreadyExist = localStorage.getItem("userIdAnalytics");
-  const [siteIdentifant] = useRecoilState(siteNameAtom);
   const { todayMls } = useTodayDate();
   const { geoData, GetGeoData } = useGeolocation();
 
@@ -16,13 +13,18 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE }) => {
   );
 
   const postData = async () => {
-    const { country, asn, ip, country_code, latitude, longitude } = geoData?.ip;
     const obj = {
       status: "published",
-      siteName: siteIdentifant,
+      siteName: siteName,
       usersId: [
         {
           userId: userAlreadyExist,
+          country: geoData?.ip.country,
+          isp: geoData?.ip.asn,
+          ip: geoData?.ip.ip,
+          country_code: geoData?.ip.country_code,
+          latitude: geoData?.ip.latitude,
+          longitude: geoData?.ip.longitude,
         },
       ],
       session: [
@@ -31,12 +33,6 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE }) => {
           sessionNumber: sessionNumbers,
         },
       ],
-      country: country,
-      isp: asn,
-      ip: ip,
-      country_code: country_code,
-      latitude: latitude,
-      longitude: longitude,
     };
 
     if (geoData !== []) {
