@@ -40,10 +40,6 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
   }, [GetGeoData, getData, geoData]);
 
   useEffect(() => {
-    console.log(datas);
-  }, [datas]);
-
-  useEffect(() => {
     if (!IsMounted.current) {
       return;
     }

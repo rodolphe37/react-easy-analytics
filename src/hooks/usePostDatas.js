@@ -39,11 +39,18 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
       try {
         await axios.post(`${BASE_URL}/siteAnalytics`, obj).then((res) => {
           if (res) {
-            console.log("res.data.data", res.data.data);
+            console.log(
+              "%cSend to server - OK",
+              "color: green;  font-weight:bold; padding: 2px"
+            );
           }
         });
       } catch (error) {
-        console.error(error);
+        console.error(
+          "%cSend to server - ERROR",
+          "color: red;  font-weight:bold; padding: 2px",
+          error
+        );
       }
     }
   };
@@ -55,7 +62,6 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
     if (geoData === {}) {
       GetGeoData();
     }
-    console.log("geoData", geoData);
   }, [geoData, GetGeoData]);
 
   return {
