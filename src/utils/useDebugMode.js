@@ -10,7 +10,7 @@ const useDebugMode = ({ BASE_URL, siteName }) => {
   const { datas } = useGetData({ BASE_URL });
   const { UserWithId } = useControlUserId();
 
-  const debugConsoles = useCallback(() => {
+  const providerDebugConsoles = useCallback(() => {
     console.group("PROVIDER = DEBUG_MODE ACTIF");
     console.group(
       "PROVIDER = %cuser geolocation",
@@ -60,7 +60,7 @@ const useDebugMode = ({ BASE_URL, siteName }) => {
     console.groupEnd();
   }, [geoData, datas, UserWithId, siteName, userSessionObject]);
   return {
-    debugConsoles,
+    providerDebugConsoles,
     geoData,
     datas,
     UserWithId,

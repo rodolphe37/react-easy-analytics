@@ -11,7 +11,7 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
   // const { SendToServer } = usePostDatas({ BASE_URL, DEBUG_MODE });
   const { sessionNumbers, incrementCount, userSessionObject } =
     useSessionNumbers();
-  const { debugConsoles } = useDebugMode({ BASE_URL, siteName });
+  const { providerDebugConsoles } = useDebugMode({ BASE_URL, siteName });
   const { geoData, GetGeoData } = useGeolocation();
   const { datas, getData } = useGetData({ BASE_URL });
   const { UserWithId } = useControlUserId();
@@ -46,7 +46,7 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
     IsMounted.current = true;
     if (IsMounted.current && DEBUG_MODE) {
       if (geoData !== null && datas.length > 0 && UserWithId !== "") {
-        debugConsoles();
+        providerDebugConsoles();
         IsMounted.current = false;
       }
     }
@@ -58,7 +58,7 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
     sessionNumbers,
     userSessionObject,
     DEBUG_MODE,
-    debugConsoles,
+    providerDebugConsoles,
   ]);
 
   const handleResetAll = () => {
