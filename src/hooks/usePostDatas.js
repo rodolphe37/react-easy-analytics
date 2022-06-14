@@ -39,23 +39,33 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
 
     if (geoData !== []) {
       try {
-        await axios.post(`${BASE_URL}/siteAnalytics`, obj).then((res) => {
-          if (res) {
-            console.log(
-              "%cSend to server - OK",
-              "color: green;  font-weight:bold; padding: 2px"
-            );
+        console.log(
+          "%cSending to server - In progress",
+          "color: orange;  font-weight:bold; padding: 2px"
+        );
+        await axios
+          .post(`${BASE_URL}/siteAnalytics`, obj)
+          .then((res) => {
+            if (res) {
+              console.log(
+                "%cSent to server - OK",
+                "color: green;  font-weight:bold; padding: 2px"
+              );
+            }
+          })
+          .then(() => {
             console.log(
               "%cupdating data - In progress",
               "color: orange;  font-weight:bold; padding: 2px"
             );
             getData();
+          })
+          .then(() => {
             console.log(
               "%cdata updated - OK",
               "color: green;  font-weight:bold; padding: 2px"
             );
-          }
-        });
+          });
       } catch (error) {
         console.error(
           "%cSend to server - ERROR",

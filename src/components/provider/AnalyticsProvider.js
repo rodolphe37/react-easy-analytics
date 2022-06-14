@@ -45,14 +45,15 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
       return;
     }
     IsMounted.current = true;
-    if (!isSended.current && geoData !== null) {
-      SendToServer();
-      isSended.current = true;
-    }
+
     if (IsMounted.current && DEBUG_MODE) {
       if (geoData !== null && datas.length > 0 && UserWithId !== "") {
         providerDebugConsoles();
         IsMounted.current = false;
+      }
+      if (!isSended.current && geoData !== null) {
+        SendToServer();
+        isSended.current = true;
       }
     }
   }, [
