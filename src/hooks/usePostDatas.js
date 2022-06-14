@@ -4,7 +4,7 @@ import useGeolocation from "./useGeolocation";
 import useGetData from "./useGetDatas";
 import useTodayDate from "./useTodayDate";
 
-const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
+const usePostDatas = ({ BASE_URL, siteName }) => {
   const userAlreadyExist = localStorage.getItem("userIdAnalytics");
   const { todayMls } = useTodayDate();
   const { geoData, GetGeoData } = useGeolocation();
