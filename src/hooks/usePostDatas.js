@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import useGeolocation from "./useGeolocation";
+import useGetData from "./useGetDatas";
 import useTodayDate from "./useTodayDate";
 
 const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
   const userAlreadyExist = localStorage.getItem("userIdAnalytics");
   const { todayMls } = useTodayDate();
   const { geoData, GetGeoData } = useGeolocation();
+  const { getData } = useGetData({ BASE_URL });
 
   const [sessionNumbers] = useState(
     Number(localStorage.getItem("sessionNumber") || 0)
@@ -41,6 +43,15 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
           if (res) {
             console.log(
               "%cSend to server - OK",
+              "color: green;  font-weight:bold; padding: 2px"
+            );
+            console.log(
+              "%cupdating data - In progress",
+              "color: orange;  font-weight:bold; padding: 2px"
+            );
+            getData();
+            console.log(
+              "%cdata updated - OK",
               "color: green;  font-weight:bold; padding: 2px"
             );
           }
