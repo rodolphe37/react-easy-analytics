@@ -1,70 +1,149 @@
-# Getting Started with Create React App
+#
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+# React-easy-analytics
 
-In the project directory, you can run:
+> This app is **_In development Mode_** &
+> the code is **_open sources_**!
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## :computer: Online Demo
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**You can use this app** **[here](react-analytics.netlify.app/)**
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### :bookmark: What is React-easy-analytics?
 
-### `npm run build`
+> After the cnil release about google analytics data leakage, I thought about a React alternative that would work internally (a Npm module, not Matomo or other alternatives), or it would only be necessary to wrap the app with a provider with a few parameters, then integrate a consumer.
+>
+> - All the identification actions are in the provider, and
+> - all the actions concerning session data are in the consumer.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### DEBUG_MODE demo
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<img  style =" margin-top: 5px; margin-right: 22px " src="demo/demo.png" alt="drawing" height="100%" width="100%"/>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+**:heavy_exclamation_mark: Dashboard Provider & consumer :heavy_exclamation_mark:**
+Then, to have a Dashboard component (to be integrated into the back-office) that displays all the data quickly and simply.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### The provider's info at this stage of development:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![alt text](demo/demo2.png "QRCode Tools")
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## :bust_in_silhouette: Author
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Thought, designed and developed with :purple_heart: by Rodolphe Augusto
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## :large_blue_diamond: A few words from the author
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Enjoy the World :smirk:
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## :sparkling_heart: Support or contribute to the project
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+If any developers want to join me on this open source project, send me a message. You are welcome.
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+I put almost everything open-source I can, and try to accommodate anyone who needs help using these projects. Obviously,
+this takes time. You can use this service for free.
 
-### Deployment
+However, if you are using this project and are happy with it or just want to encourage me to keep creating: -
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Put a star and share the project :rocket:
 
-### `npm run build` fails to minify
+Thank you! :heart:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## :scroll: License
+
+MIT
+
+---
+
+## My other projects:
+
+> ### My Simple Tutorial Creator
+>
+> https://github.com/rodolphe37/my-simple-tutorial-creator
+
+> ### My Simple Task Manager
+>
+> https://github.com/rodolphe37/my-simple-tasks-manager-
+
+> ### My Simple Cam
+>
+> https://github.com/rodolphe37/my-simple-cam-dektop-app
+
+> ### App for decrypt greenPass europe QRcode
+>
+> https://github.com/rodolphe37/qrcode-decoder
+
+> ### Css animation with Create React App base.
+>
+> https://github.com/rodolphe37/halloween2021-bat-tuto-youtube-video
+
+> ### My GitHub "open Sources" project
+>
+> https://github.com/rodolphe37/pwa-react-project
+
+> ### cra-template-github-my-profile
+>
+> https://github.com/rodolphe37/cra-template-github-my-profile
+
+> ### My Awesome Custom Alert
+>
+> https://github.com/rodolphe37/my-awesome-custom-alert
+
+> ### Geolocation starter app React-native
+>
+> https://github.com/rodolphe37/react-native_geolocation-tracker
+
+> ### Classic React Ultimate Messenger version repository (for open sources contributors)
+>
+> https://github.com/rodolphe37/rum-open-sources
+
+> ### React Ultimate Messenger template for React (create-react-app tools)
+>
+> https://github.com/rodolphe37/cra-react-ultimate-messenger
+
+> ### PWA React Ultimate Messenger template for React (create-react-app tools)
+>
+> https://github.com/rodolphe37/cra-pwa-react-ultimate-messenger
+
+> ### installation and initialization shell script for the PWA React Ultimate Messenger template
+>
+> https://github.com/rodolphe37/pwa-rum-install-pack
+
+> ### Upload-image-profil-component
+>
+> https://github.com/rodolphe37/Upload-image-profil-component
+
+> ### Jeux libres de droits "open Sources" - Memory Yoga Cards Game - Sort the Waste Game - Match 3 Yoga Game - Tetris Classic Game - Remake Earth Puzzle Game
+>
+> https://github.com/rodolphe37/install-games-repository
+
+> ### Administration template - React JS & react-admin
+>
+> https://github.com/rodolphe37/nfc-updates-front
+
+> ### Administration template Backend - Node & Express
+>
+> https://github.com/rodolphe37/nfc-updates-back
+
+---
