@@ -4,7 +4,7 @@
 
 # React-easy-analytics
 
-> This app is **_In development Mode_** &
+> This module is **_ in phase 1 of development (just beginning project), all developers who wish to join me in this project are welcome_** &
 > the code is **_open sources_**!
 
 ---
