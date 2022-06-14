@@ -40,7 +40,7 @@ const usePostDatas = ({ BASE_URL, siteName }) => {
     if (geoData !== []) {
       try {
         console.log(
-          "%cSending to server - In progress",
+          "%cPost data to server - In progress",
           "color: orange;  font-weight:bold; padding: 2px"
         );
         await axios
@@ -48,21 +48,23 @@ const usePostDatas = ({ BASE_URL, siteName }) => {
           .then((res) => {
             if (res) {
               console.log(
-                "%cSent to server - OK",
+                "%cPost to server - OK",
                 "color: green;  font-weight:bold; padding: 2px"
               );
             }
           })
           .then(() => {
             console.log(
-              "%cupdating data - In progress",
+              "%cUpdating data - In progress",
               "color: orange;  font-weight:bold; padding: 2px"
             );
+          })
+          .then(() => {
             getData();
           })
           .then(() => {
             console.log(
-              "%cdata updated - OK",
+              "%cData updated - OK",
               "color: green;  font-weight:bold; padding: 2px"
             );
           });
