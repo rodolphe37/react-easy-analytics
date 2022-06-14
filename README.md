@@ -11,7 +11,7 @@
 
 ## :computer: Online Demo
 
-**You can test this app in debug mode** **[here](react-analytics.netlify.app/)**
+**You can test this app in debug mode** **[here](https://react-analytics.netlify.app/)**
 
 ---
 
