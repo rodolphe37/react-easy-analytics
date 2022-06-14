@@ -17,6 +17,7 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
   const { UserWithId } = useControlUserId();
 
   let IsMounted = useRef(false);
+  const isSended = useRef(false);
 
   useEffect(() => {
     IsMounted.current = true;
@@ -44,8 +45,9 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
       return;
     }
     IsMounted.current = true;
-    if (IsMounted.current && datas.length === 0) {
+    if (!isSended.current && geoData !== null) {
       SendToServer();
+      isSended.current = true;
     }
     if (IsMounted.current && DEBUG_MODE) {
       if (geoData !== null && datas.length > 0 && UserWithId !== "") {
