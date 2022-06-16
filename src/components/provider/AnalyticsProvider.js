@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useControlUserId from "../../hooks/useControlUserId";
 import { useEffectOnce } from "../../hooks/useEffectOnce";
 import useGeolocation from "../../hooks/useGeolocation";
@@ -8,12 +8,24 @@ import useSessionNumbers from "../../hooks/useSessionNumbers";
 import useDebugMode from "../../utils/useDebugMode";
 
 const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
-  const { SendToServer } = usePostDatas({ BASE_URL, DEBUG_MODE, siteName });
+  const { datas, getData } = useGetData({ BASE_URL });
+  const ifSiteNameExist =
+    datas && datas.some((re) => re.siteName.includes(siteName));
+  const [datasTransition, setDatasTransition] = useState(undefined);
+
+  const { postData, updateData } = usePostDatas({
+    BASE_URL,
+    DEBUG_MODE,
+    siteName,
+    ifSiteNameExist,
+    datasTransition,
+    setDatasTransition,
+  });
   const { sessionNumbers, incrementCount, userSessionObject } =
     useSessionNumbers();
   const { providerDebugConsoles } = useDebugMode({ BASE_URL, siteName });
   const { geoData, GetGeoData } = useGeolocation();
-  const { datas, getData } = useGetData({ BASE_URL });
+
   const { UserWithId } = useControlUserId();
 
   let IsMounted = useRef(false);
@@ -41,6 +53,14 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
   }, [GetGeoData, getData, geoData]);
 
   useEffect(() => {
+    async function SendToServer() {
+      if (!ifSiteNameExist) {
+        await postData();
+      }
+      if (ifSiteNameExist) {
+        await updateData();
+      }
+    }
     if (!IsMounted.current) {
       return;
     }
@@ -51,6 +71,7 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
         providerDebugConsoles();
         IsMounted.current = false;
       }
+
       if (!isSended.current && geoData !== null) {
         SendToServer();
         isSended.current = true;
@@ -65,7 +86,9 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
     userSessionObject,
     DEBUG_MODE,
     providerDebugConsoles,
-    SendToServer,
+    ifSiteNameExist,
+    postData,
+    updateData,
   ]);
 
   const handleResetAll = () => {
