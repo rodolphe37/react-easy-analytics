@@ -35,7 +35,8 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
       DEBUG_MODE &&
       IsMounted.current &&
       sitesList.length > 0 &&
-      usersIdList.length > 0
+      usersIdList.length > 0 &&
+      datas.length > 0
     ) {
       providerDebugConsoles();
       IsMounted.current = false;
