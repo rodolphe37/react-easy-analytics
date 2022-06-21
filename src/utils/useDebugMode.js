@@ -24,7 +24,7 @@ const useDebugMode = ({ BASE_URL, siteName }) => {
         "PROVIDER = %cdata from server",
         "color: white;  font-weight:bold; background-color:blue;padding: 2px"
       );
-      console.log(datas);
+      console.log(datas.filter((r) => r.siteName === siteName));
       console.groupEnd();
       console.group(
         "PROVIDER = %cUserWithId",

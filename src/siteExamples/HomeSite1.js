@@ -13,7 +13,11 @@ function HomeSite1() {
   return (
     <div>
       <span>
-        <AnalyticsProvider DEBUG_MODE={DEBUG_MODE} BASE_URL={BASE_URL}>
+        <AnalyticsProvider
+          DEBUG_MODE={DEBUG_MODE}
+          BASE_URL={BASE_URL}
+          siteName="My-Analytics-Module"
+        >
           <div className="App">
             <AnalyticsConsumer>
               <header className="App-header">

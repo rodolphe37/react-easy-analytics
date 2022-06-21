@@ -1,6 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
-import useControlUserId from "../../hooks/useControlUserId";
 import useGetData from "../../hooks/useGetDatas";
 import useSiteIdentifiant from "../../hooks/useSiteIdentifant";
 import {
@@ -14,7 +13,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
   const [siteIdentifant, setSiteIdentifiant] = useRecoilState(siteNameAtom);
   const { datas } = useGetData({ BASE_URL });
   // const userIdFromServer = datas.map((r) => r.usersId);
-  const { usersIdList } = useControlUserId();
+  const [usersIdList, setUsersIdList] = useState([]);
   const { sitesList } = useSiteIdentifiant({ siteName });
   const [geoData] = useRecoilState(geolocationArrayAtom);
   const { providerDebugConsoles } = useDebugMode({ BASE_URL, siteName });
@@ -44,6 +43,25 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [DEBUG_MODE, siteIdentifant, sitesList, datas]);
+
+  const usersIdFiltered = useCallback(() => {
+    let combinedArray = [];
+    let uniq = {};
+    combinedArray.push(...datas.map((r, id) => r.usersId));
+    const merged = [].concat.apply([], combinedArray);
+    const arrFiltered = merged.filter(
+      (obj) => !uniq[obj.userId] && (uniq[obj.userId] = true)
+    );
+
+    setUsersIdList(arrFiltered);
+  }, [datas]);
+
+  useEffect(() => {
+    if (IsMounted.current) {
+      usersIdFiltered();
+    }
+  }, [datas, usersIdFiltered]);
+
   return (
     <div
       className="dashboard__consumer-container"
@@ -108,24 +126,10 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                       justifyContent: "space-around",
                     }}
                   >
-                    User Id from server :<span className="App-link">{res}</span>
+                    User Id from server :
+                    <span className="App-link">{res.userId}</span>
                   </span>
                 ))}
-              {usersIdList?.map((resUser, id) => (
-                <span
-                  key={id}
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  User Id from localStorage:
-                  <span className="App-link">{resUser.userId}</span>
-                </span>
-              ))}
             </div>
             <div style={{ border: "1px solid white", padding: 7 }}>
               {sitesList?.map((res, id) => (
