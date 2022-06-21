@@ -28,6 +28,12 @@
 
 ---
 
+### With dashboard demo:
+
+<img  style =" margin-top: 5px; margin-right: 22px " src="demo/demo-dashboard.png" alt="drawing" height="100%" width="100%"/>
+
+---
+
 **:heavy_exclamation_mark: Dashboard Provider & consumer :heavy_exclamation_mark:**
 Then, to have a Dashboard component (to be integrated into the back-office) that displays all the data quickly and simply.
 
