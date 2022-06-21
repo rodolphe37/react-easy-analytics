@@ -32,9 +32,15 @@
 
 ---
 
-### With dashboard demo:
+### With dashboard :
 
-<img  style =" margin-top: 5px; margin-right: 22px " src="demo/demo-dashboard.png" alt="drawing" height="100%" width="100%"/>
+#### Dashboard part :
+
+<img  style =" margin-top: 5px; margin-right: 22px " src="demo/dashboard.png" alt="drawing" height="100%" width="100%"/>
+
+#### Client Side part :
+
+<img  style =" margin-top: 5px; margin-right: 22px " src="demo/clientSide.png" alt="drawing" height="100%" width="100%"/>
 
 ---
 
@@ -45,7 +51,7 @@ Then, to have a Dashboard component (to be integrated into the back-office) that
 
 ### The provider's info at this stage of development:
 
-![alt text](demo/demo2.png "QRCode Tools")
+![alt text](demo/demo2.png "React-easy-analytics")
 
 ---
 
