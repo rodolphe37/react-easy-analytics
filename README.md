@@ -13,6 +13,8 @@
 
 **You can test this app in debug mode** **[here](https://react-analytics.netlify.app/)**
 
+**You can test the app with dashboard (in debug mode)** **[here](https://react-easy-analytics-with-dashboard-beta.netlify.app/)**
+
 ---
 
 ### :bookmark: What is React-easy-analytics?
@@ -23,6 +25,8 @@
 > - all the actions concerning session data are in the consumer.
 
 ### DEBUG_MODE demo
+
+#### started version:
 
 <img  style =" margin-top: 5px; margin-right: 22px " src="demo/demo.png" alt="drawing" height="100%" width="100%"/>
 
