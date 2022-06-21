@@ -1,12 +1,8 @@
 import { useRecoilState } from "recoil";
-import useDatasController from "../../controller/useDatasController";
-import useSessionNumbers from "../../hooks/useSessionNumbers";
 import { datasAtom } from "../../statesManager/datasAtom";
 
 const DashboardConsumer = ({ children, DEBUG_MODE }) => {
-  const { userSessionObject } = useSessionNumbers();
   const [datas] = useRecoilState(datasAtom);
-  const [analyticsData] = useDatasController({ userSessionObject });
 
   const filteredArr = datas
     ?.map((res) => res.session[0])
@@ -25,9 +21,9 @@ const DashboardConsumer = ({ children, DEBUG_MODE }) => {
       {DEBUG_MODE ? (
         <div
           style={{
-            position: "absolute",
-            bottom: "10px",
-            left: 0,
+            // position: "absolute",
+            // bottom: "10px",
+            // left: 0,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -56,10 +52,6 @@ const DashboardConsumer = ({ children, DEBUG_MODE }) => {
               </p>
             </span>
             <span style={{ color: "#fff" }}>
-              <h4 style={{ color: "#61dafb" }}>
-                Json sessions from localStorage
-              </h4>
-              {JSON.stringify(analyticsData)}
               <h4 style={{ color: "#61dafb" }}>Json sessions from server</h4>
               {JSON.stringify(filteredArr)}
             </span>

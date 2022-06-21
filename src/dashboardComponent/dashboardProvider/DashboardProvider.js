@@ -1,11 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import useGetData from "../../hooks/useGetDatas";
 import useSiteIdentifiant from "../../hooks/useSiteIdentifant";
-import {
-  geolocationArrayAtom,
-  siteNameAtom,
-} from "../../statesManager/datasAtom";
+import { siteNameAtom } from "../../statesManager/datasAtom";
 import useDebugMode from "../../utils/useDebugMode";
 
 const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
@@ -15,7 +12,6 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
   // const userIdFromServer = datas.map((r) => r.usersId);
   const [usersIdList, setUsersIdList] = useState([]);
   const { sitesList } = useSiteIdentifiant({ siteName });
-  const [geoData] = useRecoilState(geolocationArrayAtom);
   const { providerDebugConsoles } = useDebugMode({ BASE_URL, siteName });
   const resetAll = () => {
     localStorage.clear();
@@ -63,32 +59,57 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
   }, [datas, usersIdFiltered]);
 
   return (
-    <div
-      className="dashboard__consumer-container"
-      style={{
-        textAlign: "center",
-        backgroundColor: "#282c34",
-        width: "100%",
-        height: "100vh",
-      }}
-    >
+    <div className="dashboard__consumer-container">
       {DEBUG_MODE ? (
-        <div
-          style={{
-            position: "absolute",
-            zIndex: 8,
-            top: "10px",
-            width: "90%",
-            left: "1.7rem",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "space-around",
-            border: "6px solid rgba(255,255,255,0.98)",
-            background: "#000",
-            paddingBottom: 10,
-          }}
-        >
+        <div className="providerConsole">
+          <div className="header-debugger">
+            <span style={{ color: "red", fontSize: 30, marginBottom: "2rem" }}>
+              DEBUG_MODE ACTIF
+            </span>
+            <header
+              className="Dashboard-header"
+              style={{
+                color: "white",
+                fontSize: 28,
+                // position: "absolute",
+                // left: 25,
+                // top: 25,
+                marginBottom: "2rem",
+              }}
+            >
+              Dashboard
+            </header>
+            <q
+              style={{
+                textDecoration: "none",
+                color: "white",
+                fontSize: 14,
+                // position: "absolute",
+                // right: 80,
+                // top: 50,
+                maxWidth: 150,
+                marginBottom: "2rem",
+              }}
+            >
+              Open devtool to see the console.
+            </q>
+          </div>
+          <div style={{ border: "1px solid white", padding: 7 }}>
+            {sitesList?.map((res, id) => (
+              <span
+                style={{
+                  color: "white",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                }}
+                key={id}
+              >
+                Site Id :<span className="App-link">{res}</span>
+              </span>
+            ))}
+          </div>
           <br />
           <button onClick={resetAll}>Reset all</button>
           <br />
@@ -100,7 +121,9 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
               justifyContent: "space-around",
             }}
           >
-            <div style={{ border: "1px solid white", padding: 7 }}>
+            <div
+              style={{ border: "1px solid white", padding: 7, margin: "1rem" }}
+            >
               <span
                 style={{
                   color: "white",
@@ -111,7 +134,12 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                 }}
               >
                 Users number:
-                <span className="App-link">{usersIdList.length}</span>
+                <span
+                  className="App-link"
+                  style={{ fontSize: 22, fontWeight: "bold" }}
+                >
+                  {usersIdList.length}
+                </span>
               </span>
 
               {usersIdList &&
@@ -124,122 +152,161 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "space-around",
+                      border: "1px dotted red",
+                      padding: "1rem",
                     }}
                   >
-                    User Id from server :
+                    {" "}
+                    <span style={{ color: "red" }}>{id + 1}</span>
+                    &ensp; User Id from server :
                     <span className="App-link">{res.userId}</span>
                   </span>
                 ))}
             </div>
-            <div style={{ border: "1px solid white", padding: 7 }}>
-              {sitesList?.map((res, id) => (
-                <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                  key={id}
-                >
-                  Site Id :<span className="App-link">{res}</span>
-                </span>
-              ))}
-            </div>
-            {geoData && (
-              <div style={{ border: "1px solid white", padding: 7 }}>
-                <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  latitude:
-                  <span className="App-link">{geoData.ip?.latitude}</span>
-                  longitude:
-                  <span className="App-link">{geoData.ip?.longitude}</span>
-                </span>
-              </div>
-            )}
-          </div>
-          <div
-            style={{
-              color: "white",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              width: "90%",
-              justifyContent: "space-around",
-              marginTop: 15,
-              border: "1px solid white",
-              padding: 7,
-            }}
-          >
-            {geoData && (
-              <>
-                <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  City :<span className="App-link">{geoData.ip.city}</span>
-                </span>
-                <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  Country :
-                  <span className="App-link">{geoData.ip?.country}</span>
-                </span>
-                <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  isp :<span className="App-link">{geoData.ip?.asn}</span>
-                </span>
-                <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  Country Code:
-                  <span className="App-link">{geoData.ip?.country_code}</span>
-                </span>
+            <div
+              style={{
+                color: "white",
+                display: "grid",
+                gridTemplateColumns: "repeat(5,1fr)",
+                border: "1px solid white",
+                padding: 7,
+                margin: "1rem",
+              }}
+            >
+              {usersIdList && (
+                <>
+                  <span
+                    style={{
+                      color: "white",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      border: "1px dotted red",
+                      padding: "1rem",
+                    }}
+                  >
+                    City :
+                    {usersIdList.map((res, index) => (
+                      <Fragment key={index}>
+                        <span style={{ color: "red" }}>{index + 1}</span>
 
-                <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  IP :<span className="App-link">{geoData.ip?.ip}</span>
-                </span>
-              </>
+                        <span className="App-link">{res.city}</span>
+                      </Fragment>
+                    ))}
+                  </span>
+                  <span
+                    style={{
+                      color: "white",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      border: "1px dotted red",
+                      padding: "1rem",
+                    }}
+                  >
+                    Country :
+                    {usersIdList.map((res, index) => (
+                      <Fragment key={index}>
+                        <span style={{ color: "red" }}>{index + 1}</span>
+
+                        <span className="App-link">{res.country}</span>
+                      </Fragment>
+                    ))}
+                  </span>
+                  <span
+                    style={{
+                      color: "white",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      border: "1px dotted red",
+                      padding: "1rem",
+                    }}
+                  >
+                    isp :
+                    {usersIdList.map((res, index) => (
+                      <Fragment key={index}>
+                        <span style={{ color: "red" }}>{index + 1}</span>
+
+                        <span className="App-link">{res.isp}</span>
+                      </Fragment>
+                    ))}
+                  </span>
+                  <span
+                    style={{
+                      color: "white",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      border: "1px dotted red",
+                      padding: "1rem",
+                    }}
+                  >
+                    Country Code:
+                    {usersIdList.map((res, index) => (
+                      <Fragment key={index}>
+                        <span style={{ color: "red" }}>{index + 1}</span>
+
+                        <span className="App-link"> {res.country_code}</span>
+                      </Fragment>
+                    ))}
+                  </span>
+
+                  <span
+                    style={{
+                      color: "white",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      border: "1px dotted red",
+                      padding: "1rem",
+                    }}
+                  >
+                    IP :
+                    {usersIdList.map((res, index) => (
+                      <Fragment key={index}>
+                        <span style={{ color: "red" }}>{index + 1}</span>
+
+                        <span className="App-link"> {res.ip}</span>
+                      </Fragment>
+                    ))}
+                  </span>
+                </>
+              )}
+            </div>
+            {usersIdList && (
+              <div
+                style={{
+                  border: "1px solid white",
+                  padding: 7,
+                  margin: "1rem",
+                }}
+              >
+                {usersIdList.map((res, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      color: "white",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      border: "1px dotted red",
+                    }}
+                  >
+                    <span style={{ color: "red" }}>{index + 1}</span>
+                    &ensp; latitude:
+                    <span className="App-link">{res.latitude}</span>
+                    longitude:
+                    <span className="App-link">{res.longitude}</span>
+                  </span>
+                ))}
+              </div>
             )}
           </div>
         </div>

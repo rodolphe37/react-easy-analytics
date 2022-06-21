@@ -6,29 +6,18 @@ const Dashboard = () => {
   const BASE_URL = "https://b0utwv5a.directus.app/items";
 
   return (
-    <div>
+    <div className="doashboardContent">
       <DashboardProvider
         DEBUG_MODE={DEBUG_MODE}
         BASE_URL={BASE_URL}
         siteName="My-Analytics-Module"
       >
-        <div>
+        <div className="consumer">
           <DashboardConsumer DEBUG_MODE={true}>
-            <header
-              className="Dashboard-header"
-              style={{ color: "white", fontSize: 22, marginBottom: "2rem" }}
-            >
-              Dashboard
-            </header>
-            <q
-              style={{
-                textDecoration: "none",
-                color: "white",
-                fontSize: 14,
-              }}
-            >
-              Open devtool to see the console.
-            </q>
+            <span style={{ color: "white" }}>DashBoard Consumer</span>
+            <div /> <div /> <div /> <div /> <div /> <div /> <div /> <div />{" "}
+            <div /> <div /> <div /> <div /> <div /> <div /> <div /> <div />{" "}
+            <div /> <div /> <div /> <div /> <div />
           </DashboardConsumer>
         </div>
       </DashboardProvider>
