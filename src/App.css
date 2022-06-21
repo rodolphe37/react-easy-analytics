@@ -8,7 +8,7 @@
   justify-content: center;
 }
 .providerConsole {
-  width: 90%;
+  width: 100%;
   display: flex;
   margin-top: 2rem;
   flex-direction: column;

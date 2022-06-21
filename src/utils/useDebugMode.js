@@ -1,8 +1,10 @@
 import { useCallback, useRef } from "react";
+import { useRecoilState } from "recoil";
 import useControlUserId from "../hooks/useControlUserId";
 import useGeolocation from "../hooks/useGeolocation";
 import useGetData from "../hooks/useGetDatas";
 import useSessionNumbers from "../hooks/useSessionNumbers";
+import { usersIdListFilteredAtom } from "../statesManager/datasAtom";
 
 const useDebugMode = ({ BASE_URL, siteName }) => {
   const { sessionNumbers, userSessionObject } = useSessionNumbers();
@@ -10,30 +12,29 @@ const useDebugMode = ({ BASE_URL, siteName }) => {
   const { datas } = useGetData({ BASE_URL });
   const { UserWithId } = useControlUserId();
   const isLoaded = useRef(false);
+  const [usersIdList] = useRecoilState(usersIdListFilteredAtom);
 
   const providerDebugConsoles = useCallback(() => {
     if (!isLoaded.current) {
       console.group("PROVIDER = DEBUG_MODE ACTIF");
       console.group(
-        "PROVIDER = %cuser geolocation",
+        "PROVIDER = %cusers geolocation",
         "color: white;  font-weight:bold; background-color: blue;padding: 2px"
       );
-      console.table([geoData?.ip]);
+      console.table([usersIdList]);
       console.groupEnd();
       console.group(
-        "PROVIDER = %cdata from server",
+        "PROVIDER = %cAll data from server",
         "color: white;  font-weight:bold; background-color:blue;padding: 2px"
       );
       console.log(datas.filter((r) => r.siteName === siteName));
       console.groupEnd();
+
       console.group(
-        "PROVIDER = %cUserWithId",
+        "PROVIDER = %cUsersWithId",
         "color: white;  font-weight:bold; background-color:blue;padding: 2px"
       );
-      console.log(
-        `%c${UserWithId}`,
-        "font-weight: bold; color:#871F78; padding: 2px"
-      );
+      console.table([usersIdList.map((res) => res.userId)]);
       console.groupEnd();
       console.group(
         "PROVIDER = %csite name",
@@ -54,7 +55,7 @@ const useDebugMode = ({ BASE_URL, siteName }) => {
       );
       console.groupEnd();
       console.group(
-        "PROVIDER = %cuserSessionObject",
+        "PROVIDER = %cuserSessionObject from localStorage client",
         "color: white;  font-weight:bold; background-color:blue;padding: 2px"
       );
       console.log(userSessionObject);
@@ -62,7 +63,7 @@ const useDebugMode = ({ BASE_URL, siteName }) => {
       console.groupEnd();
       isLoaded.current = true;
     }
-  }, [geoData, datas, UserWithId, siteName, userSessionObject]);
+  }, [datas, usersIdList, siteName, userSessionObject]);
   return {
     providerDebugConsoles,
     geoData,

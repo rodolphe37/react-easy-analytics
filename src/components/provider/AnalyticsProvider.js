@@ -239,12 +239,22 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
               </>
             )}
           </div>
+          <span style={{ color: "red", fontSize: 30, marginBottom: "2rem" }}>
+            DEBUG_MODE ACTIF
+          </span>
         </div>
       ) : null}
       {children}
-      <br />
-      <button onClick={handleResetAll}>Reset all & reload</button>
-      <br />
+
+      {DEBUG_MODE ? (
+        <>
+          <br />
+          <button onClick={handleResetAll}>Reset all & reload</button>
+          <br />
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

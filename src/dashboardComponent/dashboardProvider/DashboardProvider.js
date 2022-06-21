@@ -1,18 +1,28 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import useGetData from "../../hooks/useGetDatas";
 import useSiteIdentifiant from "../../hooks/useSiteIdentifant";
-import { siteNameAtom } from "../../statesManager/datasAtom";
+import {
+  siteNameAtom,
+  usersIdListFilteredAtom,
+  usersListFilteredBySessionsAtom,
+} from "../../statesManager/datasAtom";
 import useDebugMode from "../../utils/useDebugMode";
+import useFilteredByUsersList from "../../utils/useFilteredByUsersList";
 
 const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
   let IsMounted = useRef(false);
   const [siteIdentifant, setSiteIdentifiant] = useRecoilState(siteNameAtom);
   const { datas } = useGetData({ BASE_URL });
   // const userIdFromServer = datas.map((r) => r.usersId);
-  const [usersIdList, setUsersIdList] = useState([]);
+  const [usersIdList, setUsersIdList] = useRecoilState(usersIdListFilteredAtom);
+  const [FilteredusersBySessions, setFilteredUsersBySessions] = useRecoilState(
+    usersListFilteredBySessionsAtom
+  );
+  const [sessionsUsersIdForCout, setUSersIdForCount] = useState([]);
   const { sitesList } = useSiteIdentifiant({ siteName });
   const { providerDebugConsoles } = useDebugMode({ BASE_URL, siteName });
+  const { usersIdFiltered } = useFilteredByUsersList();
   const resetAll = () => {
     localStorage.clear();
     window.location.reload();
@@ -40,23 +50,39 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [DEBUG_MODE, siteIdentifant, sitesList, datas]);
 
-  const usersIdFiltered = useCallback(() => {
-    let combinedArray = [];
-    let uniq = {};
-    combinedArray.push(...datas.map((r, id) => r.usersId));
-    const merged = [].concat.apply([], combinedArray);
-    const arrFiltered = merged.filter(
-      (obj) => !uniq[obj.userId] && (uniq[obj.userId] = true)
-    );
-
-    setUsersIdList(arrFiltered);
-  }, [datas]);
-
   useEffect(() => {
     if (IsMounted.current) {
-      usersIdFiltered();
+      usersIdFiltered(datas, setUsersIdList);
+
+      if (FilteredusersBySessions.length === 0) {
+        let combinedArray = [];
+        combinedArray.push(...datas.map((r, id) => r.session));
+        const merged = [].concat.apply([], combinedArray);
+        setFilteredUsersBySessions(merged);
+      }
+
+      const count = FilteredusersBySessions.map((res) => res.userId).reduce(
+        (accumulator, value) => {
+          return { ...accumulator, [value]: (accumulator[value] || 0) + 1 };
+        },
+        {}
+      );
+      const result = [];
+
+      for (let i in count) result.push([i, count[i]]);
+      const merged = [].concat.apply([], result);
+
+      setUSersIdForCount(merged);
     }
-  }, [datas, usersIdFiltered]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    datas,
+    sessionsUsersIdForCout,
+    setUsersIdList,
+    usersIdFiltered,
+    setFilteredUsersBySessions,
+  ]);
 
   return (
     <div className="dashboard__consumer-container">
@@ -94,30 +120,13 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
               Open devtool to see the console.
             </q>
           </div>
-          <div style={{ border: "1px solid white", padding: 7 }}>
-            {sitesList?.map((res, id) => (
-              <span
-                style={{
-                  color: "white",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                }}
-                key={id}
-              >
-                Site Id :<span className="App-link">{res}</span>
-              </span>
-            ))}
-          </div>
-          <br />
           <button onClick={resetAll}>Reset all</button>
           <br />
           <div
             style={{
               display: "flex",
               width: "100%",
-              alignItems: "center",
+              alignItems: "flex-start",
               justifyContent: "space-around",
             }}
           >
@@ -133,7 +142,16 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                   justifyContent: "space-around",
                 }}
               >
-                Users number:
+                <span
+                  style={{
+                    fontSize: 20,
+                    color: "orange",
+                    fontWeight: "bold",
+                    paddingBottom: "1rem",
+                  }}
+                >
+                  Users number:
+                </span>
                 <span
                   className="App-link"
                   style={{ fontSize: 22, fontWeight: "bold" }}
@@ -156,9 +174,11 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                       padding: "1rem",
                     }}
                   >
-                    {" "}
                     <span style={{ color: "red" }}>{id + 1}</span>
-                    &ensp; User Id from server :
+                    &ensp;
+                    <span style={{ marginBottom: "0.4rem" }}>
+                      User Id from server :
+                    </span>
                     <span className="App-link">{res.userId}</span>
                   </span>
                 ))}
@@ -186,12 +206,31 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                       padding: "1rem",
                     }}
                   >
-                    City :
-                    {usersIdList.map((res, index) => (
+                    <span
+                      style={{
+                        fontSize: 20,
+                        color: "orange",
+                        fontWeight: "bold",
+                        paddingBottom: "1rem",
+                      }}
+                    >
+                      sessions number :
+                    </span>
+                    {sessionsUsersIdForCout.map((res, index) => (
                       <Fragment key={index}>
-                        <span style={{ color: "red" }}>{index + 1}</span>
+                        <span
+                          style={{
+                            borderBottom: index % 2 ? "1px dotted red" : "",
 
-                        <span className="App-link">{res.city}</span>
+                            width: "100%",
+                            padding: "1rem",
+                            color: index % 2 ? "#61dafb" : "lightgray",
+                            fontSize: index % 2 ? 20 : 16,
+                            fontWeight: index % 2 ? "bold" : "normal",
+                          }}
+                        >
+                          {res}
+                        </span>
                       </Fragment>
                     ))}
                   </span>
@@ -206,7 +245,16 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                       padding: "1rem",
                     }}
                   >
-                    Country :
+                    <span
+                      style={{
+                        fontSize: 20,
+                        color: "orange",
+                        fontWeight: "bold",
+                        paddingBottom: "1rem",
+                      }}
+                    >
+                      Country :
+                    </span>
                     {usersIdList.map((res, index) => (
                       <Fragment key={index}>
                         <span style={{ color: "red" }}>{index + 1}</span>
@@ -226,7 +274,16 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                       padding: "1rem",
                     }}
                   >
-                    isp :
+                    <span
+                      style={{
+                        fontSize: 20,
+                        color: "orange",
+                        fontWeight: "bold",
+                        paddingBottom: "1rem",
+                      }}
+                    >
+                      isp :
+                    </span>
                     {usersIdList.map((res, index) => (
                       <Fragment key={index}>
                         <span style={{ color: "red" }}>{index + 1}</span>
@@ -246,7 +303,16 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                       padding: "1rem",
                     }}
                   >
-                    Country Code:
+                    <span
+                      style={{
+                        fontSize: 20,
+                        color: "orange",
+                        fontWeight: "bold",
+                        paddingBottom: "1rem",
+                      }}
+                    >
+                      Country Code:
+                    </span>
                     {usersIdList.map((res, index) => (
                       <Fragment key={index}>
                         <span style={{ color: "red" }}>{index + 1}</span>
@@ -267,7 +333,16 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                       padding: "1rem",
                     }}
                   >
-                    IP :
+                    <span
+                      style={{
+                        fontSize: 20,
+                        color: "orange",
+                        fontWeight: "bold",
+                        paddingBottom: "1rem",
+                      }}
+                    >
+                      IP :
+                    </span>
                     {usersIdList.map((res, index) => (
                       <Fragment key={index}>
                         <span style={{ color: "red" }}>{index + 1}</span>
@@ -279,35 +354,75 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                 </>
               )}
             </div>
-            {usersIdList && (
+            <div className="right-side-bar">
               <div
-                style={{
-                  border: "1px solid white",
-                  padding: 7,
-                  margin: "1rem",
-                }}
+                style={{ border: "1px solid white", padding: 7, width: "87%" }}
               >
-                {usersIdList.map((res, index) => (
+                {sitesList?.map((res, id) => (
                   <span
-                    key={index}
                     style={{
                       color: "white",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "space-around",
-                      border: "1px dotted red",
                     }}
+                    key={id}
                   >
-                    <span style={{ color: "red" }}>{index + 1}</span>
-                    &ensp; latitude:
-                    <span className="App-link">{res.latitude}</span>
-                    longitude:
-                    <span className="App-link">{res.longitude}</span>
+                    <span
+                      style={{
+                        fontSize: 20,
+                        color: "orange",
+                        fontWeight: "bold",
+                        paddingBottom: "1rem",
+                      }}
+                    >
+                      Site Id :
+                    </span>
+                    <span className="App-link">{res}</span>
                   </span>
                 ))}
               </div>
-            )}
+              {usersIdList && (
+                <div
+                  style={{
+                    border: "1px solid white",
+                    padding: 7,
+                    margin: "1rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 20,
+                      color: "orange",
+                      fontWeight: "bold",
+                      paddingBottom: "1rem",
+                    }}
+                  >
+                    Geolocation
+                  </span>
+                  {usersIdList.map((res, index) => (
+                    <span
+                      key={index}
+                      style={{
+                        color: "white",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "space-around",
+                        border: "1px dotted red",
+                      }}
+                    >
+                      <span style={{ color: "red" }}>{index + 1}</span>
+                      &ensp; latitude:
+                      <span className="App-link">{res.latitude}</span>
+                      longitude:
+                      <span className="App-link">{res.longitude}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : null}
