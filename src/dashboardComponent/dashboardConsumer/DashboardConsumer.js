@@ -1,14 +1,12 @@
-import { useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
-import useSessionNumbers from "../../../hooks/useSessionNumbers";
-import { datasAtom } from "../../../statesManager/datasAtom";
-import useDatasController from "../../../hooks/useDatasController";
+import useDatasController from "../../controller/useDatasController";
+import useSessionNumbers from "../../hooks/useSessionNumbers";
+import { datasAtom } from "../../statesManager/datasAtom";
 
 const DashboardConsumer = ({ children, DEBUG_MODE }) => {
   const { userSessionObject } = useSessionNumbers();
   const [datas] = useRecoilState(datasAtom);
   const [analyticsData] = useDatasController({ userSessionObject });
-  let IsMounted = useRef(false);
 
   const filteredArr = datas
     ?.map((res) => res.session[0])
@@ -20,23 +18,6 @@ const DashboardConsumer = ({ children, DEBUG_MODE }) => {
         return acc;
       }
     }, []);
-
-  useEffect(() => {
-    IsMounted.current = true;
-    if (DEBUG_MODE) {
-      console.warn("_________________________");
-      console.warn("CONSUMER DEBUG_MODE ACTIF");
-      console.warn("CONSUMER = FromAnalyticsConsumer", analyticsData);
-      console.warn(
-        "sesson from server :",
-        datas?.map((res) => res.session[0])
-      );
-    }
-
-    return () => {
-      IsMounted.current = false;
-    };
-  }, [analyticsData, datas, DEBUG_MODE]);
 
   return (
     <div>

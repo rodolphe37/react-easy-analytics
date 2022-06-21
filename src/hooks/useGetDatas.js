@@ -25,10 +25,12 @@ const useGetData = ({ BASE_URL }) => {
     const controller = new AbortController();
     const signal = controller.signal;
     async function handleStatus() {
-      await getData();
+      const controller = new AbortController();
+      const signal = controller.signal;
+      await getData({ signal });
     }
     if (datas.length === 0) {
-      handleStatus({ signal });
+      handleStatus();
       setIsLoaded(true);
     }
 
@@ -41,7 +43,6 @@ const useGetData = ({ BASE_URL }) => {
   return {
     datas,
     isLoaded,
-    getData,
   };
 };
 

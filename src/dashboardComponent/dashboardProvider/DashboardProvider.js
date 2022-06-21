@@ -1,53 +1,48 @@
 import { useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
-import useControlUserId from "../../../hooks/useControlUserId";
-import { useEffectOnce } from "../../../hooks/useEffectOnce";
-import useGeolocation from "../../../hooks/useGeolocation";
-import useGetData from "../../../hooks/useGetDatas";
-import { siteNameAtom } from "../../../statesManager/datasAtom";
-import useSiteIdentifiant from "../../../hooks/useSiteIdentifant";
+import useControlUserId from "../../hooks/useControlUserId";
+import { useEffectOnce } from "../../hooks/useEffectOnce";
+import useGeolocation from "../../hooks/useGeolocation";
+import useGetData from "../../hooks/useGetDatas";
+import useSiteIdentifiant from "../../hooks/useSiteIdentifant";
+import {
+  geolocationArrayAtom,
+  siteNameAtom,
+} from "../../statesManager/datasAtom";
+import useDebugMode from "../../utils/useDebugMode";
 
 const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
   let IsMounted = useRef(false);
   const [siteIdentifant, setSiteIdentifiant] = useRecoilState(siteNameAtom);
   const { datas } = useGetData({ BASE_URL });
-  // const userIdFromServer = datas.map((r) => r.usersId);
+  const userIdFromServer = datas.map((r) => r.usersId);
   const { usersIdList } = useControlUserId();
   const { sitesList } = useSiteIdentifiant({ siteName });
-  const { geoData } = useGeolocation();
+  const [geoData] = useRecoilState(geolocationArrayAtom);
+  const { providerDebugConsoles } = useDebugMode({ BASE_URL, siteName });
   const resetAll = () => {
     localStorage.clear();
     window.location.reload();
   };
 
-  useEffectOnce(() => {
+  useEffect(() => {
     if (siteName && siteIdentifant === "") {
       setSiteIdentifiant(siteName);
     }
-  }, []);
+  }, [siteName, siteIdentifant, setSiteIdentifiant]);
 
   useEffect(() => {
     IsMounted.current = true;
-    if (DEBUG_MODE) {
-      console.warn("_________________________");
-      console.warn("PROVIDER DEBUG_MODE ACTIF");
-      console.warn(
-        "PROVIDER = siteIdentifant:",
-        sitesList.map((res) => res)
-      );
-      console.warn("PROVIDER = usersIdList", usersIdList);
-      if (datas && geoData) {
-        console.warn(
-          "PROVIDER = datas from server",
-          datas,
-          "geoLocation:",
-          geoData
-        );
-      }
-    }
-    return () => {
+    if (
+      DEBUG_MODE &&
+      IsMounted.current &&
+      sitesList.length > 0 &&
+      usersIdList.length > 0
+    ) {
+      providerDebugConsoles();
       IsMounted.current = false;
-    };
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [DEBUG_MODE, siteIdentifant, sitesList, datas]);
   return (
