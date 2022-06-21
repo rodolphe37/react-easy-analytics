@@ -1,19 +1,33 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useRecoilState } from "recoil";
 import useControlUserId from "../../hooks/useControlUserId";
 import { useEffectOnce } from "../../hooks/useEffectOnce";
 import useGeolocation from "../../hooks/useGeolocation";
 import useGetData from "../../hooks/useGetDatas";
 import usePostDatas from "../../hooks/usePostDatas";
 import useSessionNumbers from "../../hooks/useSessionNumbers";
-import useDebugMode from "../../utils/useDebugMode";
+import { siteNameAtom } from "../../statesManager/datasAtom";
 
-const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
-  const { SendToServer } = usePostDatas({ BASE_URL, DEBUG_MODE, siteName });
+const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE }) => {
+  const [siteName] = useRecoilState(siteNameAtom);
+  const { datas, getData } = useGetData({ BASE_URL });
+  const ifSiteNameExist = datas && datas.some((re) => re.siteName === siteName);
+  const [datasTransition, setDatasTransition] = useState(undefined);
+  const userAlreadyExist = localStorage.getItem("userIdAnalytics");
+  const [siteIdentifant, setSiteIdentifiant] = useRecoilState(siteNameAtom);
+
+  const { postData, updateData } = usePostDatas({
+    BASE_URL,
+    DEBUG_MODE,
+    siteName,
+    ifSiteNameExist,
+    datasTransition,
+    setDatasTransition,
+  });
   const { sessionNumbers, incrementCount, userSessionObject } =
     useSessionNumbers();
-  const { providerDebugConsoles } = useDebugMode({ BASE_URL, siteName });
   const { geoData, GetGeoData } = useGeolocation();
-  const { datas, getData } = useGetData({ BASE_URL });
+
   const { UserWithId } = useControlUserId();
 
   let IsMounted = useRef(false);
@@ -34,24 +48,33 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
       try {
         GetGeoData();
         getData();
+        setSiteIdentifiant(datas.sitename);
       } catch (error) {
         console.error("Request failed:", error);
       }
     }
+    if (siteIdentifant === null) {
+      siteIdentifant(datas.siteName);
+    }
   }, [GetGeoData, getData, geoData]);
 
   useEffect(() => {
+    async function SendToServer() {
+      if (!ifSiteNameExist) {
+        await postData();
+      }
+      if (ifSiteNameExist) {
+        await updateData();
+      }
+    }
     if (!IsMounted.current) {
       return;
     }
     IsMounted.current = true;
 
     if (IsMounted.current && DEBUG_MODE) {
-      if (geoData !== null && datas.length > 0 && UserWithId !== "") {
-        providerDebugConsoles();
-        IsMounted.current = false;
-      }
       if (!isSended.current && geoData !== null) {
+        console.log("resp geo: ", geoData.ip);
         SendToServer();
         isSended.current = true;
       }
@@ -64,8 +87,9 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
     sessionNumbers,
     userSessionObject,
     DEBUG_MODE,
-    providerDebugConsoles,
-    SendToServer,
+    ifSiteNameExist,
+    postData,
+    updateData,
   ]);
 
   const handleResetAll = () => {
@@ -98,36 +122,22 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "space-around",
-            border: "6px solid rgba(255,255,255,0.98)",
-            background: "#000",
+
             paddingBottom: 10,
           }}
         >
-          <br />
-          <button onClick={handleResetAll}>Reset all</button>
-          <br />
           <div
             style={{
               display: "flex",
               width: "100%",
               alignItems: "center",
               justifyContent: "space-around",
+              flexDirection: "column",
             }}
           >
-            <div style={{ border: "1px solid white", padding: 7 }}>
-              {/* <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  Users number:
-                  <span className="App-link">{usersIdList?.length}</span>
-                </span> */}
-
+            <div
+              style={{ border: "1px solid white", padding: 7, width: "100%" }}
+            >
               <span
                 style={{
                   color: "white",
@@ -138,40 +148,9 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
                 }}
               >
                 User Id from localStorage:
-                <span className="App-link">{UserWithId}</span>
+                <span className="App-link">{userAlreadyExist}</span>
               </span>
             </div>
-            <div style={{ border: "1px solid white", padding: 7 }}>
-              <span
-                style={{
-                  color: "white",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                }}
-              >
-                Site Name :<span className="App-link">{siteName}</span>
-              </span>
-            </div>
-            {geoData && (
-              <div style={{ border: "1px solid white", padding: 7 }}>
-                <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  latitude:
-                  <span className="App-link">{geoData.ip?.latitude}</span>
-                  longitude:
-                  <span className="App-link">{geoData.ip?.longitude}</span>
-                </span>
-              </div>
-            )}
           </div>
           <div
             style={{
@@ -179,7 +158,7 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              width: "90%",
+              width: "100%",
               justifyContent: "space-around",
               marginTop: 15,
               border: "1px solid white",
@@ -252,6 +231,9 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
         </div>
       ) : null}
       {children}
+      <br />
+      <button onClick={handleResetAll}>Reset all & reload</button>
+      <br />
     </div>
   );
 };

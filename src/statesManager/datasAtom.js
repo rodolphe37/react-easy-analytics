@@ -12,7 +12,7 @@ export const geolocationArrayAtom = atom({
 
 export const userWithIdAtom = atom({
   key: "userWithIdAtom",
-  default: "",
+  default: { userId: "" },
 });
 
 export const siteNameAtom = atom({

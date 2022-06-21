@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { geolocationArrayAtom } from "../statesManager/datasAtom";
 
@@ -12,6 +12,18 @@ const useGeolocation = () => {
     });
   }, [setGeoData]);
 
+  useEffect(() => {
+    const getGeo = async () => {
+      try {
+        await GetGeoData();
+      } catch (error) {
+        console.error("Request failed:", error);
+      }
+    };
+    if (geoData === null) {
+      getGeo();
+    }
+  }, [setGeoData, GetGeoData, geoData]);
   return {
     geoData,
     GetGeoData,

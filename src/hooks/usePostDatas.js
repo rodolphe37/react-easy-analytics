@@ -1,20 +1,106 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useGeolocation from "./useGeolocation";
 import useGetData from "./useGetDatas";
 import useTodayDate from "./useTodayDate";
 
-const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
+const usePostDatas = ({ BASE_URL, siteName, ifSiteNameExist }) => {
   const userAlreadyExist = localStorage.getItem("userIdAnalytics");
   const { todayMls } = useTodayDate();
   const { geoData, GetGeoData } = useGeolocation();
-  const { getData } = useGetData({ BASE_URL });
+  const { datas } = useGetData({ BASE_URL });
+  const [datasTransition, setDatasTransition] = useState(undefined);
 
   const [sessionNumbers] = useState(
     Number(localStorage.getItem("sessionNumber") || 0)
   );
 
-  const postData = async () => {
+  useEffect(() => {
+    if (datas.length > 0 && datasTransition === undefined) {
+      setDatasTransition(
+        datas.filter((r) => r.siteName === siteName).map((r) => r.id)
+      );
+    }
+    // console.log(
+    //   "id for this site name",
+    //   ifSiteNameExist ? datasTransition : "nothing"
+    // );
+    // console.log("site name is present", ifSiteNameExist);
+  }, [ifSiteNameExist, datas, siteName, datasTransition]);
+
+  const updateData = useCallback(async () => {
+    const objUpdate = {
+      usersId: [
+        {
+          userId: userAlreadyExist,
+          country: geoData?.ip.country,
+          isp: geoData?.ip.asn,
+          ip: geoData?.ip.ip,
+          country_code: geoData?.ip.country_code,
+          latitude: geoData?.ip.latitude,
+          longitude: geoData?.ip.longitude,
+          sessionNumbers: sessionNumbers,
+        },
+      ],
+      session: [
+        {
+          date: todayMls,
+          sessionNumber: sessionNumbers,
+          userId: userAlreadyExist,
+        },
+      ],
+    };
+    if (geoData !== []) {
+      try {
+        console.log(
+          "%cPatch data to server - In progress",
+          "color: orange;  font-weight:bold; padding: 2px"
+        );
+
+        await axios
+          .patch(
+            `${BASE_URL}/siteAnalytics/${Number(datasTransition)}`,
+            objUpdate
+          )
+          .then((res) => {
+            if (res) {
+              console.log(
+                "%Patch to server - OK",
+                "color: green;  font-weight:bold; padding: 2px"
+              );
+            }
+          })
+          .then(() => {
+            console.log(
+              "%cUpdating data - In progress",
+              "color: orange;  font-weight:bold; padding: 2px"
+            );
+          })
+          .then(() => {
+            console.log(
+              "%cData updated - OK",
+              "color: green;  font-weight:bold; padding: 2px"
+            );
+          });
+      } catch (error) {
+        console.error(
+          "%cSend to server - ERROR",
+          "color: red;  font-weight:bold; padding: 2px",
+          error
+        );
+      }
+    }
+  }, [
+    BASE_URL,
+    datasTransition,
+    geoData,
+
+    sessionNumbers,
+    todayMls,
+    userAlreadyExist,
+  ]);
+
+  const postData = useCallback(async () => {
     const obj = {
       status: "published",
       siteName: siteName,
@@ -27,12 +113,14 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
           country_code: geoData?.ip.country_code,
           latitude: geoData?.ip.latitude,
           longitude: geoData?.ip.longitude,
+          sessionNumbers: sessionNumbers,
         },
       ],
       session: [
         {
           date: todayMls,
           sessionNumber: sessionNumbers,
+          userId: userAlreadyExist,
         },
       ],
     };
@@ -40,29 +128,29 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
     if (geoData !== []) {
       try {
         console.log(
-          "%cSending to server - In progress",
+          "%cPost data to server - In progress",
           "color: orange;  font-weight:bold; padding: 2px"
         );
+
         await axios
           .post(`${BASE_URL}/siteAnalytics`, obj)
           .then((res) => {
             if (res) {
               console.log(
-                "%cSent to server - OK",
+                "%cPost to server - OK",
                 "color: green;  font-weight:bold; padding: 2px"
               );
             }
           })
           .then(() => {
             console.log(
-              "%cupdating data - In progress",
+              "%cUpdating data - In progress",
               "color: orange;  font-weight:bold; padding: 2px"
             );
-            getData();
           })
           .then(() => {
             console.log(
-              "%cdata updated - OK",
+              "%cData updated - OK",
               "color: green;  font-weight:bold; padding: 2px"
             );
           });
@@ -74,11 +162,8 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
         );
       }
     }
-  };
+  }, [BASE_URL, geoData, sessionNumbers, siteName, todayMls, userAlreadyExist]);
 
-  async function SendToServer() {
-    await postData();
-  }
   useEffect(() => {
     if (geoData === {}) {
       GetGeoData();
@@ -86,7 +171,8 @@ const usePostDatas = ({ BASE_URL, DEBUG_MODE, siteName }) => {
   }, [geoData, GetGeoData]);
 
   return {
-    SendToServer,
+    postData,
+    updateData,
   };
 };
 

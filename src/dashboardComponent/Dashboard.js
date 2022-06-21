@@ -16,10 +16,19 @@ const Dashboard = () => {
           <DashboardConsumer DEBUG_MODE={true}>
             <header
               className="Dashboard-header"
-              style={{ color: "white", fontSize: 22 }}
+              style={{ color: "white", fontSize: 22, marginBottom: "2rem" }}
             >
               Dashboard
             </header>
+            <q
+              style={{
+                textDecoration: "none",
+                color: "white",
+                fontSize: 14,
+              }}
+            >
+              Open devtool to see the console.
+            </q>
           </DashboardConsumer>
         </div>
       </DashboardProvider>
