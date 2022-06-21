@@ -191,6 +191,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                 border: "1px solid white",
                 padding: 7,
                 margin: "1rem",
+                lineHeight: "1.58rem",
               }}
             >
               {usersIdList && (
@@ -356,7 +357,11 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
             </div>
             <div className="right-side-bar">
               <div
-                style={{ border: "1px solid white", padding: 7, width: "87%" }}
+                style={{
+                  border: "1px solid white",
+                  padding: 7,
+                  width: "87%",
+                }}
               >
                 {sitesList?.map((res, id) => (
                   <span
@@ -389,6 +394,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                     border: "1px solid white",
                     padding: 7,
                     margin: "1rem",
+                    lineHeight: "2.03rem",
                   }}
                 >
                   <span
