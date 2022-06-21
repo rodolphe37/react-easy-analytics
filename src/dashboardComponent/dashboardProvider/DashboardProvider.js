@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import useControlUserId from "../../hooks/useControlUserId";
-import { useEffectOnce } from "../../hooks/useEffectOnce";
-import useGeolocation from "../../hooks/useGeolocation";
 import useGetData from "../../hooks/useGetDatas";
 import useSiteIdentifiant from "../../hooks/useSiteIdentifant";
 import {
@@ -15,7 +13,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
   let IsMounted = useRef(false);
   const [siteIdentifant, setSiteIdentifiant] = useRecoilState(siteNameAtom);
   const { datas } = useGetData({ BASE_URL });
-  const userIdFromServer = datas.map((r) => r.usersId);
+  // const userIdFromServer = datas.map((r) => r.usersId);
   const { usersIdList } = useControlUserId();
   const { sitesList } = useSiteIdentifiant({ siteName });
   const [geoData] = useRecoilState(geolocationArrayAtom);
@@ -94,7 +92,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                 }}
               >
                 Users number:
-                <span className="App-link">{usersIdList?.length}</span>
+                <span className="App-link">{usersIdList.length}</span>
               </span>
 
               {usersIdList &&
@@ -124,7 +122,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                   }}
                 >
                   User Id from localStorage:
-                  <span className="App-link">{resUser}</span>
+                  <span className="App-link">{resUser.userId}</span>
                 </span>
               ))}
             </div>
@@ -187,7 +185,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                     justifyContent: "space-around",
                   }}
                 >
-                  City :<span className="App-link">{geoData.ip?.city}</span>
+                  City :<span className="App-link">{geoData.ip.city}</span>
                 </span>
                 <span
                   style={{

@@ -43,6 +43,7 @@ const useGetData = ({ BASE_URL }) => {
   return {
     datas,
     isLoaded,
+    getData,
   };
 };
 

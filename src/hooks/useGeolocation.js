@@ -9,7 +9,6 @@ const useGeolocation = () => {
   const GetGeoData = useCallback(async () => {
     await axios.get("https://ip.nf/me.json").then((response) => {
       setGeoData(response.data);
-      console.log("resp geo: ", response.data);
     });
   }, [setGeoData]);
 
@@ -21,7 +20,7 @@ const useGeolocation = () => {
         console.error("Request failed:", error);
       }
     };
-    if (!geoData) {
+    if (geoData === null) {
       getGeo();
     }
   }, [setGeoData, GetGeoData, geoData]);

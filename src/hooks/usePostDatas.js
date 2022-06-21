@@ -1,16 +1,13 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { geolocationArrayAtom, siteNameAtom } from "../statesManager/datasAtom";
 import useGeolocation from "./useGeolocation";
 import useGetData from "./useGetDatas";
 import useTodayDate from "./useTodayDate";
 
 const usePostDatas = ({ BASE_URL, siteName, ifSiteNameExist }) => {
-  const [siteIdentifant] = useRecoilState(siteNameAtom);
   const userAlreadyExist = localStorage.getItem("userIdAnalytics");
   const { todayMls } = useTodayDate();
-  const [geoData] = useRecoilState(geolocationArrayAtom);
+  const { geoData, GetGeoData } = useGeolocation();
   const { datas } = useGetData({ BASE_URL });
   const [datasTransition, setDatasTransition] = useState(undefined);
 
@@ -79,7 +76,6 @@ const usePostDatas = ({ BASE_URL, siteName, ifSiteNameExist }) => {
               "color: orange;  font-weight:bold; padding: 2px"
             );
           })
-
           .then(() => {
             console.log(
               "%cData updated - OK",
@@ -98,6 +94,7 @@ const usePostDatas = ({ BASE_URL, siteName, ifSiteNameExist }) => {
     BASE_URL,
     datasTransition,
     geoData,
+
     sessionNumbers,
     todayMls,
     userAlreadyExist,
@@ -106,7 +103,7 @@ const usePostDatas = ({ BASE_URL, siteName, ifSiteNameExist }) => {
   const postData = useCallback(async () => {
     const obj = {
       status: "published",
-      siteName: siteIdentifant,
+      siteName: siteName,
       usersId: [
         {
           userId: userAlreadyExist,
@@ -151,7 +148,6 @@ const usePostDatas = ({ BASE_URL, siteName, ifSiteNameExist }) => {
               "color: orange;  font-weight:bold; padding: 2px"
             );
           })
-
           .then(() => {
             console.log(
               "%cData updated - OK",
@@ -167,6 +163,12 @@ const usePostDatas = ({ BASE_URL, siteName, ifSiteNameExist }) => {
       }
     }
   }, [BASE_URL, geoData, sessionNumbers, siteName, todayMls, userAlreadyExist]);
+
+  useEffect(() => {
+    if (geoData === {}) {
+      GetGeoData();
+    }
+  }, [geoData, GetGeoData]);
 
   return {
     postData,
