@@ -3,7 +3,6 @@ import useRealTimeHours from "../hooks/useRealTimeHours";
 import useTodayDate from "../hooks/useTodayDate";
 import AnalyticsProvider from "../components/provider/AnalyticsProvider";
 import AnalyticsConsumer from "../components/consumer/AnalyticsConsumer";
-import { NavLink } from "react-router-dom";
 
 function HomeSite1() {
   const DEBUG_MODE = true;
