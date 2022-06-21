@@ -131,7 +131,12 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
             }}
           >
             <div
-              style={{ border: "1px solid white", padding: 7, margin: "1rem" }}
+              style={{
+                border: "1px solid white",
+                padding: 7,
+                margin: "1rem",
+                lineHeight: "1.65rem",
+              }}
             >
               <span
                 style={{
@@ -191,7 +196,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                 border: "1px solid white",
                 padding: 7,
                 margin: "1rem",
-                lineHeight: "1.58rem",
+                lineHeight: "2.17rem",
               }}
             >
               {usersIdList && (

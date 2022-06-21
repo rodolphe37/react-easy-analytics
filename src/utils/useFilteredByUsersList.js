@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 const useFilteredByUsersList = () => {
-  const usersIdFiltered = useCallback((value, setValue, valueToSearch) => {
+  const usersIdFiltered = useCallback((value, setValue) => {
     let combinedArray = [];
     let uniq = {};
     combinedArray.push(...value.map((r, id) => r.usersId));
