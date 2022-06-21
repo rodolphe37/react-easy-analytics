@@ -8,8 +8,7 @@ import usePostDatas from "../../hooks/usePostDatas";
 import useSessionNumbers from "../../hooks/useSessionNumbers";
 import { siteNameAtom } from "../../statesManager/datasAtom";
 
-const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE }) => {
-  const [siteName] = useRecoilState(siteNameAtom);
+const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
   const { datas, getData } = useGetData({ BASE_URL });
   const ifSiteNameExist = datas && datas.some((re) => re.siteName === siteName);
   const [datasTransition, setDatasTransition] = useState(undefined);
@@ -48,7 +47,7 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE }) => {
       try {
         GetGeoData();
         getData();
-        setSiteIdentifiant(datas.sitename);
+        setSiteIdentifiant(datas.siteName);
       } catch (error) {
         console.error("Request failed:", error);
       }
@@ -135,6 +134,18 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE }) => {
               flexDirection: "column",
             }}
           >
+            <span
+              style={{
+                color: "white",
+                border: "1px solid white",
+                padding: 7,
+                width: "100%",
+                textAlign: "center",
+              }}
+            >
+              Site name:&nbsp;
+              <span className="App-link">{siteName}</span>
+            </span>
             <div
               style={{ border: "1px solid white", padding: 7, width: "100%" }}
             >
@@ -228,12 +239,22 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE }) => {
               </>
             )}
           </div>
+          <span style={{ color: "red", fontSize: 30, marginBottom: "2rem" }}>
+            DEBUG_MODE ACTIF
+          </span>
         </div>
       ) : null}
       {children}
-      <br />
-      <button onClick={handleResetAll}>Reset all & reload</button>
-      <br />
+
+      {DEBUG_MODE ? (
+        <>
+          <br />
+          <button onClick={handleResetAll}>Reset all & reload</button>
+          <br />
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

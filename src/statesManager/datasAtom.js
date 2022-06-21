@@ -24,3 +24,13 @@ export const isLoadedAtom = atom({
   key: "isLoadedAtom",
   default: false,
 });
+
+export const usersIdListFilteredAtom = atom({
+  key: "usersIdListFilteredAtom",
+  default: [],
+});
+
+export const usersListFilteredBySessionsAtom = atom({
+  key: "usersListFilteredBySessionsAtom",
+  default: [],
+});
