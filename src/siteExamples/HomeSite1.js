@@ -21,7 +21,7 @@ function HomeSite1() {
                 <p>Date : {LocalDate}</p>
                 <p> Time : {time}</p>
               </header>
-              <a href="/dashboard" target="new">
+              <a href="/dashboard" target="new" style={{ color: "#61dafb" }}>
                 Go to Dashboard <br />
                 <br />
               </a>

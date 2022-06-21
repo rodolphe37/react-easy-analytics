@@ -151,41 +151,6 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE }) => {
                 <span className="App-link">{userAlreadyExist}</span>
               </span>
             </div>
-            <div
-              style={{ border: "1px solid white", padding: 7, width: "100%" }}
-            >
-              <span
-                style={{
-                  color: "white",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                }}
-              >
-                Site Name :<span className="App-link">{siteName}</span>
-              </span>
-            </div>
-            {geoData && (
-              <div
-                style={{ border: "1px solid white", padding: 7, width: "100%" }}
-              >
-                <span
-                  style={{
-                    color: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  latitude:
-                  <span className="App-link">{geoData.ip?.latitude}</span>
-                  longitude:
-                  <span className="App-link">{geoData.ip?.longitude}</span>
-                </span>
-              </div>
-            )}
           </div>
           <div
             style={{
