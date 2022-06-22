@@ -135,7 +135,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                 border: "1px solid white",
                 padding: 7,
                 margin: "1rem",
-                lineHeight: "1.65rem",
+                lineHeight: "1.323rem",
               }}
             >
               <span
@@ -196,7 +196,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                 border: "1px solid white",
                 padding: 7,
                 margin: "1rem",
-                lineHeight: "2.17rem",
+                lineHeight: "1.321rem",
               }}
             >
               {usersIdList && (
@@ -399,7 +399,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                     border: "1px solid white",
                     padding: 7,
                     margin: "1rem",
-                    lineHeight: "2.03rem",
+                    lineHeight: "2.189rem",
                   }}
                 >
                   <span
