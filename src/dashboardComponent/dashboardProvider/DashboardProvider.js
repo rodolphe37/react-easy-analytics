@@ -204,6 +204,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                           alignItems: "center",
                           justifyContent: "space-around",
                           border: "1px dotted red",
+                          padding: 11,
                         }}
                       >
                         <span style={{ color: "red" }}>{index + 1}</span>
@@ -230,7 +231,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                 <div
                   style={{
                     padding: 7,
-                    margin: "1rem",
+
                     lineHeight: "1rem",
                     border: "1px dotted red",
                   }}
@@ -252,6 +253,8 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                         padding: "1rem",
                         width: "90%",
                         borderBottom: "1px dotted red",
+                        paddingTop: "1rem",
+                        paddingBottom: "1.8rem",
                       }}
                     >
                       Users number:
@@ -507,7 +510,13 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
                           <Fragment>
                             <span style={{ color: "red" }}>{index + 1}</span>
 
-                            <span className="App-link"> {res.ip}</span>
+                            <span
+                              className="App-link"
+                              style={{ filter: "blur(3px)" }}
+                            >
+                              {" "}
+                              {res.ip}
+                            </span>
                           </Fragment>
                         </span>
                       ))}
