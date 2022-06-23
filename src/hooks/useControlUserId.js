@@ -4,16 +4,15 @@ import { userWithIdAtom } from "../statesManager/datasAtom";
 import { userIdAnalytics } from "../utils/userId";
 
 const useControlUserId = () => {
-  const userIdUtil = userIdAnalytics;
   const [UserWithId, setCreateUserWithId] = useRecoilState(userWithIdAtom);
   const userAlreadyExist = localStorage.getItem("userIdAnalytics");
   const [usersIdList, setUsersIdList] = useState([]);
 
   const userIdControler = useCallback(() => {
     function ifUserExist() {
-      if (userIdUtil && userAlreadyExist === null) {
-        setCreateUserWithId(userIdUtil);
-        localStorage.setItem("userIdAnalytics", userIdUtil);
+      if (userAlreadyExist === null) {
+        setCreateUserWithId(userIdAnalytics);
+        localStorage.setItem("userIdAnalytics", userIdAnalytics);
       } else if (userAlreadyExist !== null) {
         setCreateUserWithId(userAlreadyExist);
       }
@@ -25,7 +24,7 @@ const useControlUserId = () => {
       setUsersIdList([...usersIdList, UserWithId]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userAlreadyExist, userIdUtil, UserWithId]);
+  }, [userAlreadyExist, userIdAnalytics, UserWithId]);
 
   useEffect(() => {
     userIdControler();
