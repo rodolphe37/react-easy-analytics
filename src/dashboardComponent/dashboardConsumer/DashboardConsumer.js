@@ -50,36 +50,25 @@ const DashboardConsumer = ({ children, DEBUG_MODE, BASE_URL }) => {
     }
 
     const merged = [].concat.apply([], result);
-    console.log("count", merged);
     setFinalArray(merged);
     return merged;
   }
 
   useEffect(() => {
-    // const count = {};
-    // pathDatas
-    //   .map((res) => res.pagesView)
-    //   .forEach((element, id) => {
-    //     count[element] = (count[element] || 0) + 1;
-    //   });
-    console.log(
-      "test count ",
-      find_duplicate_in_array(pathDatas.map((res) => res.pagesView))
-    );
     setPagesViewCounted(
       find_duplicate_in_array(pathDatas.map((res) => res.pagesView))
     );
   }, [pathDatas]);
 
   useEffect(() => {
-    if (DEBUG_MODE && pagesViewCounted !== {}) {
+    if (DEBUG_MODE && finalArray.length > 0) {
       console.group("Consumer = DEBUG_MODE ACTIF");
       console.group("Pages path with count");
       console.table([pagesViewCounted]);
       console.groupEnd();
       console.groupEnd();
     }
-  }, [pagesViewCounted, DEBUG_MODE]);
+  }, [pagesViewCounted, finalArray, DEBUG_MODE]);
 
   return (
     <div>
