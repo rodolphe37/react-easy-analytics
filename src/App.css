@@ -38,7 +38,21 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  overflow-y: scroll;
+}
+
+.menuApp {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: auto;
+  list-style: none;
+}
+.menuApp li a {
+  color: black;
+  text-decoration: none;
+}
+.menuApp li a:hover {
+  color: #61dafb;
 }
 
 .App-logo {

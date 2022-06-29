@@ -15,7 +15,7 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
   const userAlreadyExist = localStorage.getItem("userIdAnalytics");
   const [siteIdentifant, setSiteIdentifiant] = useRecoilState(siteNameAtom);
 
-  const { postData, updateData } = usePostDatas({
+  const { postData } = usePostDatas({
     BASE_URL,
     DEBUG_MODE,
     siteName,
@@ -62,9 +62,9 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
       if (!ifSiteNameExist) {
         await postData();
       }
-      if (ifSiteNameExist) {
-        await updateData();
-      }
+      // if (ifSiteNameExist) {
+      //   await updateData();
+      // }
     }
     if (!IsMounted.current) {
       return;
@@ -88,7 +88,7 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
     DEBUG_MODE,
     ifSiteNameExist,
     postData,
-    updateData,
+    // updateData,
   ]);
 
   const handleResetAll = () => {
@@ -114,9 +114,9 @@ const AnalyticsProvider = ({ children, BASE_URL, DEBUG_MODE, siteName }) => {
             position: "absolute",
             zIndex: 8,
             fontSize: 14,
-            top: "10px",
+            top: "82px",
             width: "90%",
-            left: "1.7rem",
+            left: "2.8rem",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
