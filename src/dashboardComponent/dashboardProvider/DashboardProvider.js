@@ -23,10 +23,6 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
   const { sitesList } = useSiteIdentifiant({ siteName });
   const { providerDebugConsoles } = useDebugMode({ BASE_URL, siteName });
   const { usersIdFiltered } = useFilteredByUsersList();
-  const resetAll = () => {
-    localStorage.clear();
-    window.location.reload();
-  };
 
   useEffect(() => {
     if (siteName && siteIdentifant === "") {
@@ -152,7 +148,7 @@ const DashboardProvider = ({ children, siteName, DEBUG_MODE, BASE_URL }) => {
               Open devtool to see the console.
             </q>
           </div>
-          <button onClick={resetAll}>Reset all</button>
+
           <br />
           <div
             style={{
