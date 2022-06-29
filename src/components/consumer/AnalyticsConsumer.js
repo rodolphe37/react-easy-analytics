@@ -13,7 +13,7 @@ const AnalyticsConsumer = ({ children, BASE_URL }) => {
   const postData = useCallback(async () => {
     const obj = {
       status: "published",
-      usersId: userAlreadyExist,
+      userId: userAlreadyExist,
       date: todayMls,
       pagesView: pagePathView,
     };

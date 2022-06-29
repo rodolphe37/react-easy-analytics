@@ -34,3 +34,8 @@ export const usersListFilteredBySessionsAtom = atom({
   key: "usersListFilteredBySessionsAtom",
   default: [],
 });
+
+export const pathDatasAtom = atom({
+  key: "pathDatasAtom",
+  default: [],
+});
