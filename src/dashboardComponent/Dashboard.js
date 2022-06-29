@@ -11,14 +11,11 @@ const Dashboard = () => {
         DEBUG_MODE={DEBUG_MODE}
         BASE_URL={BASE_URL}
         siteName="My-Analytics-Module"
+        GEO
+        USERS
       >
         <div className="consumer">
-          <DashboardConsumer BASE_URL={BASE_URL} DEBUG_MODE={DEBUG_MODE}>
-            <span style={{ color: "white" }}>DashBoard Consumer</span>
-            <div /> <div /> <div /> <div /> <div /> <div /> <div /> <div />{" "}
-            <div /> <div /> <div /> <div /> <div /> <div /> <div /> <div />{" "}
-            <div /> <div /> <div /> <div /> <div />
-          </DashboardConsumer>
+          <DashboardConsumer BASE_URL={BASE_URL} DEBUG_MODE={DEBUG_MODE} />
         </div>
       </DashboardProvider>
     </div>

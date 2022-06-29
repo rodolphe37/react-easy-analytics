@@ -14,7 +14,6 @@ const useDashboardProvider = ({ BASE_URL, siteName, DEBUG_MODE }) => {
   let IsMounted = useRef(false);
   const [siteIdentifant, setSiteIdentifiant] = useRecoilState(siteNameAtom);
   const { datas } = useGetData({ BASE_URL });
-  // const userIdFromServer = datas.map((r) => r.usersId);
   const [usersIdList, setUsersIdList] = useRecoilState(usersIdListFilteredAtom);
   const [FilteredusersBySessions, setFilteredUsersBySessions] = useRecoilState(
     usersListFilteredBySessionsAtom
