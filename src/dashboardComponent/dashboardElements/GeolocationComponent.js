@@ -1,110 +1,79 @@
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "../../leaflet.css";
+import {
+  popupContent,
+  popupHead,
+  popupText,
+} from "../dashboardElements/popupStyles";
+import { defaultMarker } from "../dashboardElements/defaultMarker";
 import { Fragment } from "react";
 
 const GeolocationComponent = ({ GEO, usersIdList }) => {
-  return (
-    <div>
-      {GEO && usersIdList && (
-        <div
-          style={{
-            border: "1px solid white",
-            padding: 7,
-            margin: "1rem",
-            lineHeight: "2.189rem",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 20,
-              color: "orange",
-              fontWeight: "bold",
-              paddingBottom: "1rem",
-            }}
-          >
-            Geolocation
-          </span>
-          <span
-            style={{
-              color: "white",
-              display: "flex",
-              width: "100%",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              alignItems: "center",
-              justifyContent: "space-around",
-              border: "1px dotted red",
-            }}
-          >
-            {usersIdList.map((res, index) => (
-              <span
-                key={index}
-                style={{
-                  color: "white",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                  border: "1px dotted red",
-                  padding: 11,
-                }}
-              >
-                <span style={{ color: "red" }}>{index + 1}</span>
-                &ensp; latitude:
-                <span className="App-link">{res.latitude}</span>
-                longitude:
-                <span className="App-link">{res.longitude}</span>
-              </span>
-            ))}
-          </span>
-        </div>
-      )}
-      {GEO ? (
-        <span
-          style={{
-            color: "white",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "space-around",
-            border: "1px dotted red",
-            padding: "1rem",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 20,
-              color: "orange",
-              fontWeight: "bold",
-              paddingTop: "1.6rem",
-              paddingBottom: "3rem",
-            }}
-          >
-            Country :
-          </span>
-          {usersIdList.map((res, index) => (
-            <span
-              key={index}
-              style={{
-                borderTop: "1px dotted red",
-                display: "flex",
-                width: "100%",
-                height: "100%",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "space-around",
-              }}
-            >
-              <Fragment>
-                <span style={{ color: "red" }}>{index + 1}</span>
-
-                <span className="App-link">{res.country}</span>
-              </Fragment>
-            </span>
-          ))}
-        </span>
-      ) : (
-        ""
-      )}
+  return GEO ? (
+    <div className="mapContainer">
+      <MapContainer center={[46.6594564, 1.7343329]} zoom={6}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {usersIdList.map((res, index) => {
+          const lat = res.latitude;
+          const long = res.longitude;
+          const center = [lat, long];
+          return (
+            <Fragment key={index}>
+              <Marker position={center} icon={defaultMarker}>
+                <Popup className="request-popup">
+                  <div style={popupContent}>
+                    {/* <img
+                    loading="lazy"
+                    src={`${PicturesAddress}${logo_popup}`}
+                    width="100"
+                    height="80"
+                    alt="no img"
+                  /> */}
+                    <div className="m-2" style={popupHead}>
+                      {res.country}
+                    </div>
+                    <br />
+                    <div className="popupMap-container">
+                      <span style={popupText}>
+                        <span>
+                          <strong>Isp:</strong>
+                          {res.isp}
+                        </span>
+                        <br />
+                        <span>
+                          <strong>UserId:</strong>
+                          {res.userId}
+                        </span>
+                        <br />
+                        <span>
+                          <strong>Latitude:</strong>
+                          {res.latitude}
+                        </span>
+                        <br />
+                        <span>
+                          <strong>Longitude:</strong>
+                          {res.longitude}
+                        </span>
+                        <br />
+                        <span>
+                          <strong>Ip:</strong>
+                          {res.ip}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </Popup>
+              </Marker>
+            </Fragment>
+          );
+        })}
+      </MapContainer>
     </div>
+  ) : (
+    ""
   );
 };
 

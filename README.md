@@ -34,6 +34,9 @@
 
 ### With dashboard :
 
+**_Actual version_**
+<img  style =" margin-top: 5px; margin-right: 22px " src="demo/last-version.gif" alt="drawing" height="100%" width="100%"/>
+
 #### Dashboard part :
 
 <img  style =" margin-top: 5px; margin-right: 22px " src="demo/dashboard.png" alt="drawing" height="100%" width="100%"/>

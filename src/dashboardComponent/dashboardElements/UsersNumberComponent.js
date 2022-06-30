@@ -10,7 +10,6 @@ const UsersNumberComponent = ({ USERS, usersIdList }) => {
               fontWeight: "bold",
               padding: "1rem",
               width: "90%",
-              borderBottom: "1px dotted red",
               paddingTop: "1rem",
               paddingBottom: "1.8rem",
             }}
@@ -24,7 +23,6 @@ const UsersNumberComponent = ({ USERS, usersIdList }) => {
               fontWeight: "bold",
               padding: 15,
               width: "90%",
-              borderBottom: "1px dotted red",
             }}
           >
             {usersIdList.length}
