@@ -2,11 +2,11 @@ import DashboardConsumer from "./dashboardConsumer/DashboardConsumer";
 import DashboardProvider from "./dashboardProvider/DashboardProvider";
 
 const Dashboard = () => {
-  const DEBUG_MODE = true;
+  const DEBUG_MODE = false;
   const BASE_URL = "https://b0utwv5a.directus.app/items";
 
   return (
-    <div className="doashboardContent">
+    <div className="dashboardContent">
       <DashboardProvider
         DEBUG_MODE={DEBUG_MODE}
         BASE_URL={BASE_URL}

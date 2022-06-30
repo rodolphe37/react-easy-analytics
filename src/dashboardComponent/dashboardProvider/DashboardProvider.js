@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import useDashboardProvider from "../../hooks/useDashboardProvider";
 import GeolocationComponent from "../dashboardElements/GeolocationComponent";
+import MapViewComponent from "../dashboardElements/mapViewComponents/MapViewComponent";
 import SiteNameComponent from "../dashboardElements/SiteNameComponent";
 import UsersNumberComponent from "../dashboardElements/UsersNumberComponent";
 import DebugModeProvider from "./DebugModeProvider";
@@ -28,6 +30,7 @@ const DashboardProvider = ({
           <SiteNameComponent siteName={siteName} sitesList={sitesList} />
           <UsersNumberComponent USERS={USERS} usersIdList={usersIdList} />
           <GeolocationComponent GEO={GEO} usersIdList={usersIdList} />
+          <MapViewComponent usersIdList={usersIdList.map((res) => res)} />
         </div>
       ) : (
         ""
